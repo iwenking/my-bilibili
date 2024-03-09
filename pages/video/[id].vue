@@ -24,7 +24,7 @@ const onPause = () => {
 
 // 通过路由参数获取视频id
 const { params } = useRoute();
-const { data: detail } = await useFetch(`/api/hot/${params.id}`);
+const { data: detail } = await useFetch(`/api/video/${params.id}`);
 
 // 获取视频列表数据
 const { data: videoList } = await useFetch("/api/video");
