@@ -1,5 +1,34 @@
 <script setup lang="ts">
-//
+import type { VideoItem } from "@/types/video";
+// 获取频道列表
+const { data: channelList } = await useFetch("/api/channel");
+// 获取视频列表
+const { data: videoList } = await useFetch("/api/video");
+
+const list = ref<VideoItem[]>([]);
+const loading = ref(false);
+const finished = ref(false);
+//页码
+let page = 1;
+let pageSize = 20;
+const onLoad = () => {
+  loading.value = false;
+  //根据页码提取数据
+  const data = videoList.value?.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  ) as VideoItem[];
+  //追加数据
+  list.value.push(...data);
+  //页码+1
+  page++;
+  //判断是否加载完毕
+  if (list.value.length === videoList.value.length) {
+    finished.value = true;
+  }
+};
+//初始化加载-主动请求前20条数据，用于首屏渲染,方便SEO抓取到数据
+onLoad();
 </script>
 
 <template>
@@ -18,33 +47,42 @@
   </header>
   <!-- 频道模块 -->
   <van-tabs>
-    <van-tab v-for="item in 10" :key="item" title="频道" />
+    <van-tab v-for="item in channelList" :key="item.id" :title="item.name" />
   </van-tabs>
   <!-- 视频列表 -->
-  <div class="video-list">
-    <NuxtLink class="v-card" v-for="item in 20" :key="item" :to="`/video/0`">
-      <div class="card">
-        <div class="card-img">
-          <img
-            class="pic"
-            src="@/assets/images/loading.png"
-            alt="当你觉得扛不住的时候来看看这段视频"
-          />
+
+  <van-list
+    v-model:loading="loading"
+    :finished="finished"
+    finished-text="去bilibili看更多视频"
+    @load="onLoad"
+  >
+    <div class="video-list">
+      <NuxtLink
+        class="v-card"
+        v-for="item in list"
+        :key="item.aid"
+        :to="`/video`"
+      >
+        <div class="card">
+          <div class="card-img">
+            <img class="pic" :src="item.pic" :alt="item.title" />
+          </div>
+          <div class="count">
+            <span>
+              <i class="iconfont icon_shipin_bofangshu"></i>
+              {{ item.stat.view }}
+            </span>
+            <span>
+              <i class="iconfont icon_shipin_danmushu"></i>
+              {{ item.stat.danmaku }}
+            </span>
+          </div>
         </div>
-        <div class="count">
-          <span>
-            <i class="iconfont icon_shipin_bofangshu"></i>
-            676.2万
-          </span>
-          <span>
-            <i class="iconfont icon_shipin_danmushu"></i>
-            1.6万
-          </span>
-        </div>
-      </div>
-      <p class="title">当你觉得扛不住的时候来看看这段视频</p>
-    </NuxtLink>
-  </div>
+        <p class="title">{{ item.title }}</p>
+      </NuxtLink>
+    </div>
+  </van-list>
 </template>
 
 <style lang="scss">
@@ -142,3 +180,4 @@
   }
 }
 </style>
+~/types/video
