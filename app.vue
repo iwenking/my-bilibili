@@ -4,7 +4,7 @@
   <!-- <NuxtLink to="/">首页</NuxtLink>
   <NuxtLink to="/video">视频</NuxtLink> -->
 
-  <NuxtPage />
+  <NuxtPage :keepalive="{ max: 10 }" />
 </template>
 <script setup lang="ts">
 //SEO 优化信息
