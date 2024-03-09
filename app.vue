@@ -1,8 +1,8 @@
 <template>
   <!-- 首页 index/index.vue -->
   <!-- Nuxt 页面路由 相当于RouterView -->
-  <NuxtLink to="/">首页</NuxtLink>
-  <NuxtLink to="/video">视频</NuxtLink>
+  <!-- <NuxtLink to="/">首页</NuxtLink>
+  <NuxtLink to="/video">视频</NuxtLink> -->
 
   <NuxtPage />
 </template>
@@ -16,8 +16,13 @@ useSeoMeta({
     "B站,弹幕,字幕,AMV,MAD,MTV,ANIME,动漫,动漫音乐,游戏,游戏直播,ACG,galgame,动画,番组,新番,初音,洛天依,vocaloid",
 });
 </script>
-<style>
+<style lang="scss">
+@import "./assets/styles/base.scss";
+// 字体图标
+@import "./assets/styles/iconfont.scss";
 :root {
   --van-primary-color: #fb7299 !important;
+  --van-back-top-background: #fbfbfb !important;
+  --van-back-top-text-color: #666 !important;
 }
 </style>
